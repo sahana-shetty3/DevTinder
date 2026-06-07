@@ -6,4 +6,5 @@
 -listen to 7777
 -write  request handle
 -install nodemon
--update scripts package.jsong
+-update scripts package.json
+
