@@ -11,7 +11,7 @@ app.use("/shetty",(req,res)=>{
 })
 
 app.use("/hello",(req,res)=>{
-    res.send("hello from dashboard from sahana and swapna");
+    res.send("hello ");
 })
 
 app.listen(3,()=>{
