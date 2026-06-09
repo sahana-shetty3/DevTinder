@@ -1,37 +1,32 @@
 const express = require("express");
-
 const app= express();
 
-// app.get("/user",(req,res)=>{
-//     res.send({firstName:"sahana",lastName:"Shetty"});
-// });
-// app.post("/user",(req,res)=>{
-//     console.log("save data to the database")
-//     res.send("data sucessfully saved to database");
-// });
 
-// app.delete("/user",(req,res)=>{
-//     res.send("data deleted")
-// })
 
 app.use("/user",
     (req,res,next)=>{
-    console.log("1st handler")
+    // res.send("route handler 1"); 
+     console.log("handling the route handler1")
+     next();  
     
-    next();
-    // res.send("1st handler");
-}, 
-(req,res,next)=>{
-    console.log("save data to the database")
-    // res.send("2nd handler");
+},
+[(req,res,next)=>{
+    // res.send("router handler 2")
+    console.log("handling the router 2")
     next();
 }
-, 
+,
 (req,res,next)=>{
-    console.log("3rd handler")
-    res.send("3nd handler");
-    // next();
-})
+    // res.send("router handler 3")
+    console.log("handling the router 3")
+    next();
+}]
+,
+(req,res)=>{
+    res.send("router handler 4")
+    console.log("handling the router 4")
+}
+)
 
 app.listen(3,()=>{
     console.log("server sucessfully listening on port");
