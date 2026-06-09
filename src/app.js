@@ -1,30 +1,23 @@
 const express = require("express");
 const app = express();
-const {adminAuth,userAuth}=require("./middlewares/auth")
 
-//handle auth middleware for all request 
-app.use("/admin",adminAuth);
+app.use("/",(err,req,res,next)=>{
+    if(err){
 
-app.get("/user",userAuth,(req,res)=>{
-    res.send("user data")
-});
-//we dont need a userAuth here some function do not need a authentication
-app.post("/user/login",(req,res)=>{
-    res.send("logged sucessfully")
+    res.status(401).send("error");
+    }
 })
+app.get("/get",(req,res)=>{
+    // try{
+     throw new Error("aaa");
 
-app.get("/admin/getAllData",(req,res)=>
-{  
-        res.send("all data sent")
-    
+        res.send("user data is sent");
 
+    // }
+    // catch(err){
+        //res.status(500).send("random error")
+    //}
 })
-app.get("/admin/deleteUser",(req,res)=>{
-    //logic of checking if the request is autorised
-   console.log("deleted all the data");
-   res.send("deleted")
-    
-});
 
 app.listen(3,()=>{
     console.log("server sucessfully listening on port");
