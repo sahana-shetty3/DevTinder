@@ -72,24 +72,18 @@ app.patch("/user",async (req,res)=>{
     
 
     try{
-        const user=  await User.findByIdAndUpdate(userId,data,{returnDocument:"after"});
+        const user=  await User.findByIdAndUpdate(userId,data,{
+            returnDocument:"after",runValidators:true,});
         console.log(user);
         res.send("user added sucessfully");
         console.log(users);
 
     }catch (err){
-        res.status(401).send("something went wrong");
+        res.status(401).send("update message"+err.message);
     }
 })
 
-app.("/helper", async (res,req)=>{
-    const name = req.body.firstName;
-
-    try{
-        const user = await User.findOne({})
-    }
-})
-    
+ 
 
 connectDB().then(()=>{
     console.log("database connection sucessfull");
