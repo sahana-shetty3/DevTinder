@@ -32,6 +32,7 @@ const userSchema=mongoose.Schema({
     },
     photoUrl:{
         type:String,
+        index:true,
     },skills:{
         type:[String]
     },about:{

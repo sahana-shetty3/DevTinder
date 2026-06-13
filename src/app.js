@@ -25,7 +25,7 @@ app.get("/user",async (req,res)=>{
     try{
        const users = await User.findOne({});
 
-       if(users.length===0){
+       if(userS.length===0){
         res.status(404).send("user not found")
        }
        else{
@@ -62,38 +62,59 @@ app.delete("/user", async (req,res) =>{
         res.status(401).send("somehing went wrong")
     }
 });
+
 //update the user
 
-app.patch("/user",async (req,res)=>{
+app.patch("/user/:userId",async (req,res)=>{
     
-    const userId= req.body.userId;
-    
+    const userId= req.params?.userId;
     const data = req.body;
-    
+
+    const ALLOWED_UPDATES =[
+        "userId",
+        "photourl","about","gender","age","skills"
+    ]
 
     try{
-        const user=  await User.findByIdAndUpdate(userId,data,{
-            returnDocument:"after",runValidators:true,});
-        console.log(user);
-        res.send("user added sucessfully");
-        console.log(users);
+    const ALLOWED_UPDATES =[
+        "userId",
+        "photourl",
+        "about",
+        "gender",
+        "age",
+        "skills"
+    ];
 
-    }catch (err){
-        res.status(401).send("update message"+err.message);
+    const isUpdateAllowed = Object.keys(data).every((k)=>
+    ALLOWED_UPDATES.includes(k)
+    );
+    if(!isUpdateAllowed){
+        throw new Error(" Update not allowed ")
+    }
+    if(data?.skills.length>10)
+    {
+        throw new Error("skills cannot be more thn 10")
+    }
+    const user=  await User.findByIdAndUpdate(userId,data,{
+        returnDocument:"after",runValidators:true,});
+    console.log(user);
+    res.send("User added sucessfully");
+    console.log(users);
+    }
+    catch (err){
+        res.status(400).send(" Update message :"+err.message);
     }
 })
 
- 
-
 connectDB().then(()=>{
-    console.log("database connection sucessfull");
+    console.log("Database connection sucessfull!!!");
     app.listen(3,()=>{
-    console.log("server sucessfully listening on port");
+    console.log("Server sucessfully listening on port!!!.......");
 });
 
 })
 .catch(err=>{
-    console.error("database cannot be connected");
+    console.error("Database cannot be connected");
 })
 
 
