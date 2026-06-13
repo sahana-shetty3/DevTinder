@@ -91,7 +91,7 @@ app.patch("/user/:userId",async (req,res)=>{
     if(!isUpdateAllowed){
         throw new Error(" Update not allowed ")
     }
-    if(data?.skills.length>10)
+    if(data?.skills.length >10)
     {
         throw new Error("skills cannot be more thn 10")
     }
@@ -102,7 +102,7 @@ app.patch("/user/:userId",async (req,res)=>{
     console.log(users);
     }
     catch (err){
-        res.status(400).send(" Update message :"+err.message);
+        res.status(400).send(" Update message : "+err.message);
     }
 })
 
