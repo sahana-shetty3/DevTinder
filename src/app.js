@@ -6,18 +6,49 @@ const {validateSignUpData} = require("./utils/validation");
 const bcrypt = require("bcrypt");
 
 app.use(express.json());
+
 app.post("/signup",async(req,res)=>{
      try{
     //validation of data
     validateSignUpData(req);
+
+    const { firstName,lastName,emailId,password}=req.body;
     
     //encrypt password
-    
+    const passwordHash =await bcrypt.hash(password,10);
+    console.log(passwordHash);
    
-    const user= new User(req.body);
+    const user= new User({
+        firstName,lastName,emailId,password:passwordHash
+    });
         await user.save();
     res.send("user added sucessfully");
     }
+    catch(err){
+        res.status(401).send(" Error : "+err.message);
+
+    }
+})
+
+app.post("/login",async (req,res)=>{
+    try{
+        const {emailId,password}= req.body;
+
+        const user = await User.findOne({emailId:emailId});
+        if(!user){
+            throw new Error("Invalid Credential");
+        }
+
+        const isPasswordValid = bcrypt.compare(password,user.password);
+
+        if(isPasswordValid){
+            res.send("Login sucessfull")
+        }
+        else{
+            throw new Error("Invalid Credential")
+            }
+        }
+
     catch(err){
         res.status(401).send(" Error : "+err.message);
 
@@ -69,7 +100,6 @@ app.delete("/user", async (req,res) =>{
 });
 
 //update the user
-
 app.patch("/user/:userId",async (req,res)=>{
     
     const userId= req.params?.userId;
