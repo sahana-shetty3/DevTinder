@@ -2,19 +2,24 @@ const express = require("express");
 const {connectDB}=require("./config/database");
 const app = express();
 const User=require("./models/user");
+const {validateSignUpData} = require("./utils/validation");
+const bcrypt = require("bcrypt");
 
 app.use(express.json());
-
 app.post("/signup",async(req,res)=>{
+     try{
+    //validation of data
+    validateSignUpData(req);
     
-    //creating a new instance of User model
+    //encrypt password
+    
+   
     const user= new User(req.body);
-    try{
         await user.save();
     res.send("user added sucessfully");
     }
     catch(err){
-        res.status(401).send("error saving the user"+err.message);
+        res.status(401).send(" Error : "+err.message);
 
     }
 })
@@ -70,10 +75,7 @@ app.patch("/user/:userId",async (req,res)=>{
     const userId= req.params?.userId;
     const data = req.body;
 
-    const ALLOWED_UPDATES =[
-        "userId",
-        "photourl","about","gender","age","skills"
-    ]
+ 
 
     try{
     const ALLOWED_UPDATES =[
