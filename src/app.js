@@ -59,9 +59,9 @@ app.get("/user",async (req,res)=>{
     const userEmail = req.body.emailId;
 
     try{
-       const users = await User.findOne({});
+       const users = await User.findOne({emailId:"sahanshetty@gmail.com"});
 
-       if(userS.length===0){
+       if(users.length===0){
         res.status(404).send("user not found")
        }
        else{
@@ -137,6 +137,7 @@ app.patch("/user/:userId",async (req,res)=>{
         res.status(400).send(" Update message : "+err.message);
     }
 })
+
 
 connectDB().then(()=>{
     console.log("Database connection sucessfull!!!");
