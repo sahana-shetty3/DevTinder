@@ -12,14 +12,14 @@ app.post("/signup",async(req,res)=>{
     //validation of data
     validateSignUpData(req);
 
-    const { firstName,lastName,emailId,password}=req.body;
+    const { firstName,lastName,emailId,password,gender}=req.body;
     
     //encrypt password
     const passwordHash =await bcrypt.hash(password,10);
     console.log(passwordHash);
    
     const user= new User({
-        firstName,lastName,emailId,password:passwordHash
+        firstName,lastName,emailId,password:passwordHash,gender
     });
         await user.save();
     res.send("user added sucessfully");
