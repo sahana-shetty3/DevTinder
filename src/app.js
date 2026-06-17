@@ -138,6 +138,22 @@ app.patch("/user/:userId",async (req,res)=>{
     }
 })
 
+app.get("/data",async (req,res)=>{
+    try{
+        const emailId=req.body.emailId;
+
+        const user = await User.findOne({emailId})
+
+        if(!user){
+            res.status(402).send("not found the user");
+        }
+        res.send("user sends");
+    }
+    catch (err){
+        res.status(400).send(err.message);
+    }
+})
+
 
 connectDB().then(()=>{
     console.log("Database connection sucessfull!!!");
