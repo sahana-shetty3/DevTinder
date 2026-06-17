@@ -4,8 +4,10 @@ const app = express();
 const User=require("./models/user");
 const {validateSignUpData} = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookieParser =  require("cookie-parser");
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup",async(req,res)=>{
      try{
@@ -34,25 +36,42 @@ app.post("/login",async (req,res)=>{
     try{
         const {emailId,password}= req.body;
 
-        const user = await User.findOne({emailId:emailId});
+        const user = await User.findOne({ emailId }).select("+password");
         if(!user){
             throw new Error("Invalid Credential");
         }
 
-        const isPasswordValid = bcrypt.compare(password,user.password);
+        const isPasswordValid = await bcrypt.compare(password,user.password);
 
         if(isPasswordValid){
-            res.send("Login sucessfull")
+            //Create a JWT token
+
+            //Add the token to cookie and send the response back to the user
+
+            res.cookie("token","tttttxwwgc");
+
+            res.send("Login sucessfull");
         }
         else{
             throw new Error("Invalid Credential")
             }
+                
+
         }
 
     catch(err){
         res.status(401).send(" Error : "+err.message);
 
     }
+})
+
+app.get("/profile",async (req,res)=>{
+     const cookies =req.cookies;
+
+     console.log(cookies);
+     res.send("reading cookies")
+
+
 })
 
 app.get("/user",async (req,res)=>{
@@ -104,8 +123,6 @@ app.patch("/user/:userId",async (req,res)=>{
     
     const userId= req.params?.userId;
     const data = req.body;
-
- 
 
     try{
     const ALLOWED_UPDATES =[
