@@ -38,12 +38,12 @@ const userSchema=mongoose.Schema({
     },
     gender:{
         type:String,
-        // validate(value)
-        // {
-        //     if(!["male","female","other"].includes(value)){
-        //     throw new Error("gender is not valid")
-        // }},
-        enum:["male","female","others"],
+        validate(value)
+        {
+            if(!["male","female","other"].includes(value)){
+            throw new Error("gender is not valid")
+        }},
+        // enum:["male","female","others"],
     },
     photourl:{
         type:String,
