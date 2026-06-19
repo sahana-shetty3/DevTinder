@@ -8,3 +8,4 @@
 -install nodemon
 -update scripts package.json
 
+-validators (DB)

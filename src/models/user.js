@@ -43,15 +43,15 @@ const userSchema=mongoose.Schema({
             if(!["male","female","other"].includes(value)){
             throw new Error("gender is not valid")
         }},
-        // enum:["male","female","others"],
+        enum:["male","female","others"],
     },
     photourl:{
         type:String,
         index:true,
-        // validate(value){
-        //     if(!validator.isURL(value)){
-        //         throw new Error("invalid photo url "+value)
-        //     }
+        validate(value){
+            if(!validator.isURL(value)){
+                throw new Error("invalid photo url "+value)
+            }
         }
     },
     skills:{
