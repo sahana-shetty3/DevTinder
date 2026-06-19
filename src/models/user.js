@@ -48,10 +48,10 @@ const userSchema=mongoose.Schema({
     photourl:{
         type:String,
         index:true,
-        validate(value){
-            if(!validator.isURL(value)){
-                throw new Error("invalid photo url "+value)
-            }
+        // validate(value){
+        //     if(!validator.isURL(value)){
+        //         throw new Error("invalid photo url "+value)
+        //     }
         }
     },
     skills:{
