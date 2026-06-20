@@ -18,6 +18,8 @@ const userAuth= (req,res,next)=>{
     if(!user){
         throw new Error("User not fount");
     }
+req.user=user;
+
     next();
 }
 catch(err){
