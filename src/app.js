@@ -10,27 +10,23 @@ const jwt = require("jsonwebtoken");
 app.use(express.json());
 app.use(cookieParser());
 
-app.post("/signup",async(req,res)=>{
-     try{
-    //validation of data
-    validateSignUpData(req);
+app.post("/signup",async (req,res)=>{
+    try{
+        //validate data
+        validateSignUpData(req);
+        const {firstName,lastName,emailId,password}=req.body;
+        //bcrypt the password
 
-    const { firstName,lastName,emailId,password,gender}=req.body;
-    
-    //encrypt password
-    const passwordHash =await bcrypt.hash(password,10);
-    console.log(passwordHash);
-   
-    const user= new User({
-        firstName,lastName,emailId,password:passwordHash,gender
-    });
+        const passwordHash = await bcrypt.hash(password,10);
+
+        const user = await new User({firstName,lastName,emailId,password:passwordHash});
+
         await user.save();
-    res.send("user added sucessfully");
+        res.send("user added sucessfully");
     }
-    catch(err){
-        res.status(401).send(" Error : "+err.message);
-
-    }
+   catch(err){
+    res.status(401).send("error"+err.message)
+   }
 })
 
 app.post("/login",async (req,res)=>{
