@@ -70,6 +70,16 @@ app.get("/profile",userAuth,async (req,res)=>{
     }
 })
 
+app.post("/sentConnectionReq",userAuth,async(req,res)=>{
+    try{
+        console.log("connection equest is sent")
+        res.send("connection request is sent")
+    }
+    catch(err){
+        res.status(401).send("Error: "+err.message);
+    }
+})
+
 app.get("/user",async (req,res)=>{
     const userEmail = req.body.emailId;
 
@@ -168,21 +178,7 @@ app.get("/data",async (req,res)=>{
         res.status(400).send(err.message);
     }
 })
-app.get("/data",async (req,res)=>{
-    try{
-        const emailId=req.body.emailId;
 
-        const user = await User.findOne({emailId})
-
-        if(!user){
-            res.status(402).send("not found the user");
-        }
-        res.send("user sends");
-    }
-    catch (err){
-        res.status(400).send(err.message);
-    }
-})
 
 connectDB().then(()=>{
     console.log("Database connection sucessfull!!!");
