@@ -1,22 +1,24 @@
 const jwt = require("jsonwebtoken");
 const User =require("../models/user")
 
-const userAuth= (req,res,next)=>{
+const userAuth= async (req,res,next)=>{
  try {  //read the token from req cookies
 
     const {token}= req.cookies;
+    console.log(req.cookies);
     if(!token){
         throw new Error("token is invalid")
     }
 
     const decodedObj = await jwt.verify(token,"devTinder2003");
+    // console.log(decodedObj);
 
     const {_id} = decodedObj;
 
     const user=await User.findById(_id);
 
     if(!user){
-        throw new Error("User not fount");
+        throw new Error("User not found");
     }
 req.user=user;
 
@@ -30,6 +32,6 @@ catch(err){
    
 }
 module.exports ={
-adminAuth,
+userAuth,
 
 }
