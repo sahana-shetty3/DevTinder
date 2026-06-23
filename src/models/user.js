@@ -5,7 +5,7 @@ const jwt =require("jsonwebtoken")
 const userSchema=mongoose.Schema({
     firstName:{
         type:String,
-        require:true,
+        required:true,
         minLength:4,
     },
     lastName:{
@@ -14,7 +14,7 @@ const userSchema=mongoose.Schema({
     emailId:{
         type:String,
         lowercase:true,
-         require:true,
+         required:true,
          unique:true,
          trim:true,
          validate(value){
