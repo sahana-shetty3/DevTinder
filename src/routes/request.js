@@ -1,7 +1,7 @@
 const express = require("express");
-const User=require("./models/user");
+const User=require("../models/user");
 const requestRouter = express.Router();
-const {userAuth}=require("./middlewares/auth");
+const {userAuth}=require("../middlewares/auth");
 
 requestRouter.post("/sentConnectionReq",userAuth,async(req,res)=>{
     try{
