@@ -11,6 +11,10 @@ profileRouter.get("/profile",userAuth,async (req,res)=>{
     catch(err){
         res.status(401).send(" Error : "+err.message);
     }
+});
+
+profileRouter.patch("/profile/profileRouter",async (req,res)=>{
+    
 })
 
 module.exports = profileRouter;
