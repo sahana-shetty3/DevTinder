@@ -18,6 +18,23 @@ const validateSignUpData=(req)=>{
     }
 
 };
+
+const validateEditProfileData=(req)=>{
+try{ 
+    const allowedEditField=["firstName","lastName","emailId","photoURL","gender","age","about","skills"];
+
+    const isEditAllowed=Object.keys(req.body).every(field=>
+        allowedEditField.includes(field)
+
+    );
+
+    return isEditAllowed;}
+    catch (err){
+        res.status(401).send("Error: "+err.message);
+    }
+
+}
 module.exports={
     validateSignUpData,
+    validateEditProfileData,
 }
