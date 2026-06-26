@@ -4,7 +4,7 @@ const User=require("../models/user");
 const profileRouter = express.Router();
 const validateEditProfileData=require("../utils/validation")
 
-profileRouter.get("/profile",userAuth,async (req,res)=>{
+profileRouter.get("/profile/view",userAuth,async (req,res)=>{
    try {
    
      res.send(req.user);
@@ -14,7 +14,7 @@ profileRouter.get("/profile",userAuth,async (req,res)=>{
     }
 });
 
-profileRouter.patch("/profile/profileRouter",async (req,res)=>{
+profileRouter.patch("/profile/edit",userAuth,async (req,res)=>{
     try{
         if(!validateEditProfileData(req)){
             return res.status(401).send("InvalidEdit");

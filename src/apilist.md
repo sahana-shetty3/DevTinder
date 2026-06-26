@@ -14,7 +14,7 @@
 -POST /request/review/accepted/:requestId
 -POST /request/review/rejected/:requestId
 
-
+## User
 -GET /user/connection
 -GET /user/request/received
 -GET /user/feed -gets you feeds others profiles o the platform
