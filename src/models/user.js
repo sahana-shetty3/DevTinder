@@ -80,7 +80,12 @@ userSchema.methods.validatePassword=async function(passwordInputByUser){
     const user = this;
 
     const passwordHash=user.password;
-     const isPasswordValid = await bcrypt.compare(
+
+    if (!passwordInputByUser || !passwordHash) {
+        throw new Error("Missing password data for comparison.");
+    }
+    
+    const isPasswordValid = await bcrypt.compare(
         passwordInputByUser,
         passwordHash
     );
@@ -91,3 +96,5 @@ const User=mongoose.model("User",userSchema);
 
 
 module.exports = User;
+
+

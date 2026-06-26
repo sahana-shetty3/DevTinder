@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User =require("../models/user")
+const User =require("../models/user");
 
 const userAuth= async (req,res,next)=>{
  try {  //read the token from req cookies
@@ -13,14 +13,15 @@ const userAuth= async (req,res,next)=>{
     const decodedObj = await jwt.verify(token,"devTinder2003");
     // console.log(decodedObj);
 
-    const {_id} = decodedObj;
+    // const {_id} = decodedObj;
 
-    const user=await User.findById(_id);
+    // Inside your userAuth middleware, make sure you select the password
+    const user = await User.findById(decodedObj._id).select("+password");
 
     if(!user){
         throw new Error("User not found");
     }
-req.user=user;
+    req.user=user;
 
     next();
 }

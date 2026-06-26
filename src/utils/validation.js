@@ -2,7 +2,7 @@ const validator =require("validator")
 
 const validateSignUpData=(req)=>{
 
-    const {firstName,lastName,emailId,password}=req.body;
+    const {firstName,lastName,emailId,password,setNewPassword}=req.body;
 
     if(!firstName||!lastName){
         throw new Error("name is not valid")
@@ -16,6 +16,9 @@ const validateSignUpData=(req)=>{
     else if(!validator.isStrongPassword(password)){
         throw new Error("Please enter a strong password!!!")
     }
+    else if(!validator.isStrongPassword(setNewPassword)){
+            throw new Error("Password is not strong");
+        }
 
 };
 
@@ -32,9 +35,25 @@ try{
     catch (err){
         res.status(401).send("Error: "+err.message);
     }
-
 }
+
+    const validateNewPassword = (req)=>{
+        const {password,setNewPassword}=req.body;
+
+        if(!password || !setNewPassword){
+            throw new Error("Both current and new password is required")
+        }
+
+        if(!validator.isStrongPassword(setNewPassword)){
+            throw new Error("Password is not strong");
+        }
+    };
+
+
+
 module.exports={
+    validateNewPassword,
     validateSignUpData,
     validateEditProfileData,
+    
 }
