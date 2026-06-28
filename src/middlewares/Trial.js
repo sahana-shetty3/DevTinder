@@ -28,6 +28,37 @@ const userAuth = async (req, res, next) => {
         res.status(400).send("ERROR: " + err.message);
     }
 };
+requestRouter.post("/request/send/:status/:toUserId",userAuth,async(req,res)=>{
+try{
+    const fromUserId = req.user._id;
+    const toUserId = req.params.toUserId;
+    const status = req.params.status;
+
+    const allowedStatus = ["ignored","intrested"];
+
+    if(!allowedStatus.includes(status))
+    {
+       return res.status(401).json({message:"Invalid status type : "+status})
+    }
+
+    const connectionRequest = new ConnectionRequestModel({
+        fromUserId,
+        toUserId,
+        status
+    });
+
+    const data = await connectionRequest.save();
+
+    res.json({message:"Connection request is sent sucessfully",data});
+}
+catch(err){
+        res.status(401).send("Error: "+err.message);
+}
+})
+
+
+
+
 
 module.exports = { userAuth };
 
