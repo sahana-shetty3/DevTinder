@@ -16,9 +16,12 @@ try{
     {
        return res.status(400).json({message:"Invalid status type : "+status})
     }
+    const toUser = await User.findById(toUserId);
 
+    if(!toUser){
+        return res.status(400).json({message:"user not found"})
+    }
 
-    
     //if there is an existing connection request 
 
     const existingConectionRequest = await ConnectionRequestModel.findOne({
