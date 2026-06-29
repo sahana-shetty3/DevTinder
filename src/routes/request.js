@@ -10,11 +10,25 @@ try{
     const toUserId = req.params.toUserId;
     const status = req.params.status;
 
-    const allowedStatus = ["ignored","intrested"];
+    const allowedStatus = ["ignored","interested"];
 
     if(!allowedStatus.includes(status))
     {
-       return res.status(401).json({message:"Invalid status type : "+status})
+       return res.status(400).json({message:"Invalid status type : "+status})
+    }
+
+
+    
+    //if there is an existing connection request 
+
+    const existingConectionRequest = await ConnectionRequestModel.findOne({
+         $or:[
+            {fromUserId:toUserId},
+            {fromUserId:toUserId,toUserId:fromUserId}
+         ]
+    })
+    if(existingConectionRequest){
+        return res.status(400).send({message:"connection request already exists"})
     }
 
     const connectionRequest = new ConnectionRequestModel({
@@ -25,10 +39,10 @@ try{
 
     const data = await connectionRequest.save();
 
-    res.json({message:"Connection request is sent sucessfully",data});
+    res.json({message:"Connection request is sent sucessfully",data,});
 }
 catch(err){
-        res.status(401).send("Error: "+err.message);
+        res.status(400).send("Error: "+err.message);
 }
 })
 
