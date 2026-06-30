@@ -42,7 +42,9 @@ try{
 
     const data = await connectionRequest.save();
 
-    res.json({message:"Connection request is sent sucessfully",data,});
+    res.json({message:
+                    req.user.firstName+" is "+status+" in "+toUser.firstName,
+                data,});
 }
 catch(err){
         res.status(400).send("Error: "+err.message);
