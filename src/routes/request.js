@@ -26,7 +26,7 @@ try{
 
     const existingConectionRequest = await ConnectionRequestModel.findOne({
          $or:[
-            {fromUserId:toUserId},
+            {fromUserId,toUserId},
             {fromUserId:toUserId,toUserId:fromUserId}
          ]
     })
@@ -50,5 +50,39 @@ catch(err){
         res.status(400).send("Error: "+err.message);
 }
 })
+
+requestRouter.post("/request/review/:status/:requestId",userAuth,async(req,res)=>
+{try{
+    const loggedInUser = req.user;
+    const {status,requestId}= req.params;
+
+    const allowedStatus =["accepted","rejected"];
+
+    if(!allowedStatus.includes(status)){
+        return  res.status(400).json({message:"status not found"});
+    }
+
+    const connectionRequest = await ConnectionRequestModel.findOne({
+        _id:requestId,
+        toUserId:loggedInUser._id,
+        status:"interested"
+
+    })
+
+    if(!connectionRequest){
+        return res.status(400).json({message:"connection req not found"})
+
+    }
+
+    connectionRequest.status= status;
+    const data =await connectionRequest.save();
+    res.json({message:"connection status"+status,data})
+
+
+
+}
+catch(err){
+    res.status(400).send("Error: "+err.message)
+}})
 
 module.exports=requestRouter;
