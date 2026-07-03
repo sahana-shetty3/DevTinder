@@ -19,6 +19,34 @@ userRouter.get("/user/request/received",userAuth,async(req,res)=>{
     }
 })
 
+userRouter.get("/user/connection",userAuth,async(req,res)=>{
+try{
+    const loggedInUser = req.user;
+    const _USER_SAFE_DATA ="firstName,lastName,age,about,skills";
+    const connectionRequest = await ConnectionRequestModel.find({
+       $or:[
+        {fromUserID:loggedInUser._id,status:"accepted"},
+        {toUserId:loggedInUser._id,status:"accepted"}
+       ] 
+    }).populate("toUserId",_USER_SAFE_DATA).
+       populate("fromUserId",_USER_SAFE_DATA);
+
+    const data = connectionRequest.map((row)=>{
+        if(row.toUserId._id.toString()===loggedInUser._id.toString()){
+            return row.toUserId;
+        }
+        else{
+            return row.fromUserID;
+        }
+    })
+    res.json({data});
+
+}catch(err){
+    res.status(400).send("Error: "+err.message);
+}
+
+})
+
 
 
 module.exports = userRouter;
