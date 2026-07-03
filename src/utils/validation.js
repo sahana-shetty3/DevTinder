@@ -2,7 +2,7 @@ const validator =require("validator")
 
 const validateSignUpData=(req)=>{
 
-    const {firstName,lastName,emailId,password,setNewPassword}=req.body;
+    const {firstName,lastName,emailId,password}=req.body;
 
     if(!firstName||!lastName){
         throw new Error("name is not valid")
@@ -16,9 +16,7 @@ const validateSignUpData=(req)=>{
     else if(!validator.isStrongPassword(password)){
         throw new Error("Please enter a strong password!!!")
     }
-    else if(!validator.isStrongPassword(setNewPassword)){
-            throw new Error("Password is not strong");
-        }
+    
 
 };
 
