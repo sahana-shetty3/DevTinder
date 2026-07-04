@@ -2,17 +2,22 @@ const express = require("express");
 const userRouter = express.Router();
 const User =require("../models/user");
 const ConnectionRequestModel =require("../models/connectionRequest");
-const {userAuth }=require("../middlewares/auth")
+const {userAuth }=require("../middlewares/auth");
+const mongoose =require("mongoose");
 
 userRouter.get("/user/request/received",userAuth,async(req,res)=>{
     try{
         const loggedInUser = req.user;
-        const connectionRequest = await ConnectionRequestModel.findOne({
-            toUserId = loggedInUser._id,
-            status ="interested",
-        }).populate("fromUserId","firstName,lastName,age,about,skills");
+        const connectionRequest = await ConnectionRequestModel.find({
+            toUserId: new mongoose.Types.ObjectId(loggedInUser._id),
+            status :"interested",
+        }).populate("fromUserId","firstName lastName age about skills");
 
-        res.json({message:"data fetched sucessfully"})
+        res.json({
+                  message:"data fetched sucessfully",
+                  data:connectionRequest,
+                })
+console.log()
     }
     catch (err){
         res.status(400).send("Error: "+err.message)
@@ -22,7 +27,7 @@ userRouter.get("/user/request/received",userAuth,async(req,res)=>{
 userRouter.get("/user/connection",userAuth,async(req,res)=>{
 try{
     const loggedInUser = req.user;
-    const _USER_SAFE_DATA ="firstName,lastName,age,about,skills";
+    const _USER_SAFE_DATA ="firstName lastName age about skills";
     const connectionRequest = await ConnectionRequestModel.find({
        $or:[
         {fromUserID:loggedInUser._id,status:"accepted"},
@@ -47,6 +52,14 @@ try{
 
 })
 
+userRouter.get("/feed",userAuth,async(req,res)=>{
+    try{
+
+    }
+    catch(err){
+        res.status(400).send("Error: "+err.message);
+    }
+})
 
 
 module.exports = userRouter;

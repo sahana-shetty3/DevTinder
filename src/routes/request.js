@@ -65,21 +65,16 @@ requestRouter.post("/request/review/:status/:requestId",userAuth,async(req,res)=
     const connectionRequest = await ConnectionRequestModel.findOne({
         _id:requestId,
         toUserId:loggedInUser._id,
-        status:"interested"
-
+        status:"interested",
     })
 
     if(!connectionRequest){
-        return res.status(400).json({message:"connection req not found"})
+        return res.status(400).json({message:"connection request not found"})
 
     }
-
     connectionRequest.status= status;
     const data =await connectionRequest.save();
-    res.json({message:"connection status"+status,data})
-
-
-
+    res.json({message:" connection status  "+status,data})
 }
 catch(err){
     res.status(400).send("Error: "+err.message)
