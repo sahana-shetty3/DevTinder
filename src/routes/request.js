@@ -31,7 +31,7 @@ try{
          ]
     })
     if(existingConectionRequest){
-        return res.status(400).send({message:"connection request already exists"})
+        return res.status(400).json({message:"connection request already exists"})
     }
 
     const connectionRequest = new ConnectionRequestModel({

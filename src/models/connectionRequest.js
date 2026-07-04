@@ -33,7 +33,7 @@ connectionRequestSchema.pre("save",function(next){
     const connectionRequest= this;
 
     if(connectionRequest.fromUserId.equals(connectionRequest.toUserId)){
-        throw new Error("You  can't send connection request to yourself")
+    return res.json({message:"You  can't send connection request to yourself"})
     }
     
 })
