@@ -4,6 +4,7 @@ const User =require("../models/user");
 const ConnectionRequestModel =require("../models/connectionRequest");
 const {userAuth }=require("../middlewares/auth");
 const mongoose =require("mongoose");
+ const USER_SAFE_DATA ="firstName lastName age about skills";
 
 userRouter.get("/user/request/received",userAuth,async(req,res)=>{
     try{
@@ -27,14 +28,14 @@ console.log()
 userRouter.get("/user/connection",userAuth,async(req,res)=>{
 try{
     const loggedInUser = req.user;
-    const _USER_SAFE_DATA ="firstName lastName age about skills";
+   
     const connectionRequest = await ConnectionRequestModel.find({
        $or:[
         {fromUserID:loggedInUser._id,status:"accepted"},
         {toUserId:loggedInUser._id,status:"accepted"}
        ] 
-    }).populate("toUserId",_USER_SAFE_DATA).
-       populate("fromUserId",_USER_SAFE_DATA);
+    }).populate("toUserId",USER_SAFE_DATA).
+       populate("fromUserId",USER_SAFE_DATA);
 
     const data = connectionRequest.map((row)=>{
         if(row.toUserId._id.toString()===loggedInUser._id.toString()){
@@ -54,6 +55,30 @@ try{
 
 userRouter.get("/feed",userAuth,async(req,res)=>{
     try{
+        let loggedInUser = req.user;
+
+        const connectionRequest = await ConnectionRequestModel.find({
+            $or:[
+                {fromUserId:loggedInUser._id},
+                {toUserId:loggedInUser._id} 
+            ]
+        }).select("fromUserId","toUserId");
+
+        const hideUserFromFeed = new Set();
+
+        connectionRequest.forEach(req =>{
+            hideUserFromFeed.add(req.fromUserId.toString());
+            hideUserFromFeed.add(req.toUserId.toString());
+        });
+
+        const user =await User.find({
+            $and:[
+                {_id:{$nin:Array.from(hideUserFromFeed)}},
+                {_id:{$ne:loggedInUser._id}},
+            ]
+        }).select(USER_SAFE_DATA);
+
+        res.send(user);
 
     }
     catch(err){
