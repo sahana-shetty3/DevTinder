@@ -4,7 +4,7 @@ const User =require("../models/user");
 const ConnectionRequestModel =require("../models/connectionRequest");
 const {userAuth }=require("../middlewares/auth");
 const mongoose =require("mongoose");
- const USER_SAFE_DATA ="firstName lastName age about skills";
+const USER_SAFE_DATA ="firstName lastName age about skills";
 
 userRouter.get("/user/request/received",userAuth,async(req,res)=>{
     try{
@@ -18,7 +18,7 @@ userRouter.get("/user/request/received",userAuth,async(req,res)=>{
                   message:"data fetched sucessfully",
                   data:connectionRequest,
                 })
-console.log()
+
     }
     catch (err){
         res.status(400).send("Error: "+err.message)
@@ -31,7 +31,7 @@ try{
    
     const connectionRequest = await ConnectionRequestModel.find({
        $or:[
-        {fromUserID:loggedInUser._id,status:"accepted"},
+        {fromUserId:loggedInUser._id,status:"accepted"},
         {toUserId:loggedInUser._id,status:"accepted"}
        ] 
     }).populate("toUserId",USER_SAFE_DATA).
@@ -42,7 +42,7 @@ try{
             return row.toUserId;
         }
         else{
-            return row.fromUserID;
+            return row.fromUserId;
         }
     })
     res.json({data});
@@ -66,7 +66,7 @@ userRouter.get("/feed",userAuth,async(req,res)=>{
                 {fromUserId:loggedInUser._id},
                 {toUserId:loggedInUser._id} 
             ]
-        }).select("fromUserId","toUserId");
+        }).select("fromUserId toUserId");
 
         const hideUserFromFeed = new Set();
 
