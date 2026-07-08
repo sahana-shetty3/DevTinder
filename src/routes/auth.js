@@ -11,12 +11,12 @@ authRouter.post("/signup",async (req,res)=>{
     try{
         //validate data
         validateSignUpData(req);
-        const {firstName,lastName,emailId,password}=req.body;
+        const {firstName,lastName,emailId,password,photourl}=req.body;
         //bcrypt the password
 
         const passwordHash = await bcrypt.hash(password,10);
 
-        const user = await new User({firstName,lastName,emailId,password:passwordHash});
+        const user = await new User({firstName,lastName,emailId,password:passwordHash,photourl});
 
         await user.save();
         res.send("user added sucessfully");
@@ -44,7 +44,7 @@ authRouter.post("/login",async (req,res)=>{
                 {
                 expires:new Date(Date.now()+8+3600000)
                 });
-            res.send("Login sucessfull");
+            res.send(user);
         }
         else{
             throw new Error("Invalid Credential")
