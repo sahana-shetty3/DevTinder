@@ -19,7 +19,7 @@ authRouter.post("/signup",async (req,res)=>{
         const user = await new User({firstName,lastName,emailId,password:passwordHash,photourl});
 
         await user.save();
-        res.send("user added sucessfully");
+        res.json({message:"user added sucessfully"});
     }
    catch(err){
     res.status(401).send("error"+err.message)
@@ -44,7 +44,7 @@ authRouter.post("/login",async (req,res)=>{
                 {
                 expires:new Date(Date.now()+8+3600000)
                 });
-            res.send(user);
+            res.json({user});
         }
         else{
             throw new Error("Invalid Credential")
