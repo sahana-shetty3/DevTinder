@@ -4,6 +4,10 @@ const User =require("../models/user");
 const userAuth= async (req,res,next)=>{
  try {  //read the token from req cookies
 
+    if(req.method == "OPTIONS"){
+        return res.status(200).send("OK")
+    }
+
     const {token}= req.cookies;
     
     if(!token){
