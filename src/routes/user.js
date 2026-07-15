@@ -39,10 +39,10 @@ try{
 
     const data = connectionRequest.map((row)=>{
         if(row.toUserId._id.toString()===loggedInUser._id.toString()){
-            return row.toUserId;
+            return row.fromUserId;
         }
         else{
-            return row.fromUserId;
+            return row.toUserId;
         }
     })
     res.json({data});
