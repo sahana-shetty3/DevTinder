@@ -4,7 +4,7 @@ const User =require("../models/user");
 const ConnectionRequestModel =require("../models/connectionRequest");
 const {userAuth }=require("../middlewares/auth");
 const mongoose =require("mongoose");
-const USER_SAFE_DATA ="firstName lastName age about skills";
+const USER_SAFE_DATA ="firstName lastName age about skills photourl";
 
 userRouter.get("/user/request/received",userAuth,async(req,res)=>{
     try{
@@ -12,7 +12,7 @@ userRouter.get("/user/request/received",userAuth,async(req,res)=>{
         const connectionRequest = await ConnectionRequestModel.find({
             toUserId: new mongoose.Types.ObjectId(loggedInUser._id),
             status :"interested",
-        }).populate("fromUserId","firstName lastName age about skills");
+        }).populate("fromUserId","firstName lastName age about skills photourl");
 
         res.json({
                   message:"data fetched sucessfully",
