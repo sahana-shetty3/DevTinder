@@ -11,15 +11,24 @@ authRouter.post("/signup",async (req,res)=>{
     try{
         //validate data
         validateSignUpData(req);
-        const {firstName,lastName,emailId,password,photourl}=req.body;
+        const {firstName,lastName,emailId,password}=req.body;
         //bcrypt the password
 
         const passwordHash = await bcrypt.hash(password,10);
 
-        const user = await new User({firstName,lastName,emailId,password:passwordHash,photourl});
+        const user = await new User({firstName,lastName,emailId,password:passwordHash});
 
-        await user.save();
-        res.json({message:"user added sucessfully"});
+        const savedUser = await user.save();
+
+         //Create a JWT token
+            const token=await savedUser.getJWT(); 
+            //Add the token to cookie and send the response back to the user
+            res.cookie("token",token,
+                {
+                expires:new Date(Date.now()+8+3600000)
+                });
+
+        res.json({message:"user added sucessfully",data:savedUser});
     }
    catch(err){
     res.status(401).send("error"+err.message)
